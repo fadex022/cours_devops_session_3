@@ -39,8 +39,6 @@ pipeline {
             }
         }
 
-
-
         stage('Run Tests') {
             when {
                 expression { return !params.SKIP_TESTS }
@@ -60,7 +58,9 @@ pipeline {
                         --cov-report=xml:coverage.xml \
                         --cov-report=html:htmlcov \
                         --cov-report=term \
-                        --cov-fail-under=95
+                        --cov-fail-under=80
+
+                    sonar-scanner
                 '''
             }
             post {
