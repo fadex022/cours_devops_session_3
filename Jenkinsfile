@@ -44,7 +44,7 @@ pipeline {
                 expression { return !params.SKIP_TESTS }
             }
             steps {
-                withSonarQubeEnv(MySonarqube) {
+                withSonarQubeEnv(SonarQube) {
                     sh '''
                     . venv/bin/activate
                     # Install additional test dependencies if needed
