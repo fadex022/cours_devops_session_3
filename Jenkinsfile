@@ -44,7 +44,8 @@ pipeline {
                 expression { return !params.SKIP_TESTS }
             }
             steps {
-                sh '''
+                withSonarQubeEnv(SonarQube) {
+                    sh '''
                     . venv/bin/activate
                     # Install additional test dependencies if needed
                     pip install pytest-xdist
@@ -61,7 +62,8 @@ pipeline {
                         --cov-fail-under=80
 
                     sonar-scanner
-                '''
+                    '''
+                }
             }
             post {
                 always {
