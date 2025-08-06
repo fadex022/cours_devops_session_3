@@ -89,7 +89,7 @@ pipeline {
 
         stage('SonarQube Analysis') {
             steps {
-                withSonarQubeEnv('SonarScanner') {
+                withSonarQubeEnv('MySonarqube') {
                     script {
                         def scannerArgs = """
                             -Dsonar.projectKey=fastapi-postgres \
