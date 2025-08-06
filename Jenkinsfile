@@ -44,27 +44,27 @@ pipeline {
                 expression { return !params.SKIP_TESTS }
             }
             steps {
-                withSonarQubeEnv('SonarScanner') {
-                    sh '''
-                    . venv/bin/activate
-                    # Install additional test dependencies if needed
-                    pip install pytest-xdist
+                // withSonarQubeEnv('SonarScanner') {
+                sh '''
+                . venv/bin/activate
+                # Install additional test dependencies if needed
+                pip install pytest-xdist
 
-                    # Run tests with JUnit report for better visualization in Jenkins
-                    pytest --junitxml=test-results.xml
+                # Run tests with JUnit report for better visualization in Jenkins
+                pytest --junitxml=test-results.xml
 
-                    # Run tests with coverage reporting
-                    pytest \
-                        --cov=. \
-                        --cov-report=xml:coverage.xml \
-                        --cov-report=html:htmlcov \
-                        --cov-report=term \
-                        --cov-fail-under=80
+                # Run tests with coverage reporting
+                pytest \
+                    --cov=. \
+                    --cov-report=xml:coverage.xml \
+                    --cov-report=html:htmlcov \
+                    --cov-report=term \
+                    --cov-fail-under=80
 
-                    # export PATH=$PATH:/var/lib/jenkins/sonar-scanner-4.7.0.2747-linux/bin
-                    sonar-scanner
-                    '''
-                }
+                # export PATH=$PATH:/var/lib/jenkins/sonar-scanner-4.7.0.2747-linux/bin
+                # sonar-scanner
+                '''
+                //}
             }
             post {
                 always {
@@ -87,7 +87,7 @@ pipeline {
             }
         }
 
-        /* stage('SonarQube Analysis') {
+        stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv('SonarScanner') {
                     script {
@@ -97,7 +97,7 @@ pipeline {
                             -Dsonar.sources=. \
                             -Dsonar.python.coverage.reportPaths=coverage.xml \
                             -Dsonar.python.xunit.reportPaths=test-results.xml \
-                            -Dsonar.exclusions=venv *//**,tests *//**,**//* __pycache__ *//**,*.pyc
+                            -Dsonar.exclusions=venv/**,tests/**,**/__pycache__/**,*.pyc
                         """
 
                         if (env.CHANGE_ID) {
@@ -118,7 +118,7 @@ pipeline {
                     }
                 }
             }
-        } */
+        }
 
         stage('Quality Gate') {
             steps {
