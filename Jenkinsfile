@@ -101,7 +101,7 @@ pipeline {
                             -Dsonar.exclusions=venv *//**,tests *//**,**//* __pycache__ *//**,*.pyc
                         """ */
 
-                        def scannerArgs = ""
+                        /* def scannerArgs = ""
                         
                         if (env.CHANGE_ID) {
                             // Analyse Pull Request
@@ -115,7 +115,7 @@ pipeline {
                         } else {
                             // Analyse branche
                             scannerArgs = "-Dsonar.branch.name=${env.BRANCH_NAME}"
-                        }
+                        } */
 
                         sh "${scannerHome}/bin/sonar-scanner"
                     }
