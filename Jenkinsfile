@@ -89,7 +89,7 @@ pipeline {
 
         stage('SonarQube Analysis') {
             steps {
-                withSonarQubeEnv('SonarScanner') {
+                withSonarQubeEnv('MySonarqube') {
                     script {
                         def scannerArgs = """
                             -Dsonar.projectKey=fastapi-postgres \
@@ -118,6 +118,9 @@ pipeline {
                         sh "sonar-scanner ${scannerArgs}"
                     }
                 }
+                // Archive the report-task.txt file for Quality Gate
+                sh "cp .scannerwork/report-task.txt ."
+                archiveArtifacts artifacts: 'report-task.txt', allowEmptyArchive: true
             }
         }
 
