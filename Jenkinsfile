@@ -117,7 +117,7 @@ pipeline {
                             scannerArgs = "-Dsonar.branch.name=${env.BRANCH_NAME}"
                         } */
 
-                        sh "${scannerHome}/bin/sonar-scanner"
+                        sh "${scannerHome}/bin/sonar-scanner -Dsonar.host.url=https://sonarqube.devgauss.com"
                     }
                 }
             }
