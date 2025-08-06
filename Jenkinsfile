@@ -103,7 +103,7 @@ pipeline {
 
                         if (env.CHANGE_ID) {
                             // Analyse Pull Request
-                            scannerArgs += """
+                            def scannerArgs = """
                                 -Dsonar.pullrequest.key=${env.CHANGE_ID} \
                                 -Dsonar.pullrequest.branch=${env.CHANGE_BRANCH} \
                                 -Dsonar.pullrequest.base=${env.CHANGE_TARGET} \
@@ -112,7 +112,7 @@ pipeline {
                             """
                         } else {
                             // Analyse branche
-                            scannerArgs += "-Dsonar.branch.name=${env.BRANCH_NAME}"
+                            def scannerArgs = "-Dsonar.branch.name=${env.BRANCH_NAME}"
                         }
 
                         sh "${scannerHome}/bin/sonar-scanner"
