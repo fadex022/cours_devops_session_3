@@ -61,8 +61,8 @@ pipeline {
                         --cov-report=term \
                         --cov-fail-under=80
 
-                    export PATH=$PATH:/var/lib/jenkins/sonar-scanner-4.7.0.2747-linux/bin
-                    sonar-scanner
+                    # export PATH=$PATH:/var/lib/jenkins/sonar-scanner-4.7.0.2747-linux/bin
+                    # sonar-scanner
                     '''
                 }
             }
@@ -83,6 +83,47 @@ pipeline {
                         reportFiles: 'index.html',
                         reportName: 'Coverage Report'
                     ])
+                }
+            }
+        }
+
+        stage('SonarQube Analysis') {
+            steps {
+                withSonarQubeEnv('SonarScanner') {
+                    script {
+                        def scannerArgs = """
+                            -Dsonar.projectKey=fastapi-postgres \
+                            -Dsonar.projectName="FastAPI PostgreSQL Application" \
+                            -Dsonar.sources=. \
+                            -Dsonar.python.coverage.reportPaths=coverage.xml \
+                            -Dsonar.python.xunit.reportPaths=test-results.xml \
+                            -Dsonar.exclusions=venv/**,tests/**,**/__pycache__/**,*.pyc
+                        """
+
+                        if (env.CHANGE_ID) {
+                            // Analyse Pull Request
+                            scannerArgs += """
+                                -Dsonar.pullrequest.key=${env.CHANGE_ID} \
+                                -Dsonar.pullrequest.branch=${env.CHANGE_BRANCH} \
+                                -Dsonar.pullrequest.base=${env.CHANGE_TARGET} \
+                                -Dsonar.pullrequest.provider=github \
+                                -Dsonar.pullrequest.github.repository=fadex022/cours_devops_session_3
+                            """
+                        } else {
+                            // Analyse branche
+                            scannerArgs += "-Dsonar.branch.name=${env.BRANCH_NAME}"
+                        }
+
+                        sh "sonar-scanner ${scannerArgs}"
+                    }
+                }
+            }
+        }
+
+        stage('Quality Gate') {
+            steps {
+                timeout(time: 1, unit: 'HOURS') {
+                    waitForQualityGate abortPipeline true
                 }
             }
         }
