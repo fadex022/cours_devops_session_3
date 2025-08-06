@@ -89,16 +89,15 @@ pipeline {
 
         stage('SonarQube Analysis') {
             steps {
-                withSonarQubeEnv('MySonarqube') {
+                withSonarQubeEnv('SonarScanner') {
                     script {
                         def scannerArgs = """
                             -Dsonar.projectKey=fastapi-postgres \
-                            -Dsonar.projectName="FastAPI PostgreSQL Application" \
+                            -Dsonar.projectName="Fastapi Postgresql Application" \
                             -Dsonar.sources=. \
                             -Dsonar.python.coverage.reportPaths=coverage.xml \
                             -Dsonar.python.xunit.reportPaths=test-results.xml \
-                            -Dsonar.exclusions=venv/**,tests/**,**/__pycache__/**,*.pyc \
-                            -Dsonar.working.directory=.scannerwork
+                            -Dsonar.exclusions=venv/**,tests/**,**/__pycache__/**,*.pyc
                         """
 
                         if (env.CHANGE_ID) {
@@ -118,9 +117,6 @@ pipeline {
                         sh "sonar-scanner ${scannerArgs}"
                     }
                 }
-                // Archive the report-task.txt file for Quality Gate
-                sh "cp .scannerwork/report-task.txt ."
-                archiveArtifacts artifacts: 'report-task.txt', allowEmptyArchive: true
             }
         }
 
