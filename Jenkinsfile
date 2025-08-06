@@ -91,6 +91,7 @@ pipeline {
             steps {
                 withSonarQubeEnv('MySonarqube') {
                     script {
+                        def scannerHome = tool 'SonarScanner'
                         def scannerArgs = """
                             -Dsonar.projectKey=fastapi-postgres \
                             -Dsonar.projectName="Fastapi Postgresql Application" \
@@ -114,7 +115,7 @@ pipeline {
                             scannerArgs += "-Dsonar.branch.name=${env.BRANCH_NAME}"
                         }
 
-                        sh "sonar-scanner ${scannerArgs}"
+                        sh "${scannerHome}/bin/sonar-scanner ${scannerArgs}"
                     }
                 }
             }
