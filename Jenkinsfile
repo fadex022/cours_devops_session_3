@@ -44,7 +44,7 @@ pipeline {
                 expression { return !params.SKIP_TESTS }
             }
             steps {
-                withSonarQubeEnv('MySonarqube') {
+                withSonarQubeEnv('SonarScanner') {
                     sh '''
                     . venv/bin/activate
                     # Install additional test dependencies if needed
@@ -62,7 +62,7 @@ pipeline {
                         --cov-fail-under=80
 
                     # export PATH=$PATH:/var/lib/jenkins/sonar-scanner-4.7.0.2747-linux/bin
-                    # sonar-scanner
+                    sonar-scanner
                     '''
                 }
             }
@@ -87,7 +87,7 @@ pipeline {
             }
         }
 
-        stage('SonarQube Analysis') {
+        /* stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv('SonarScanner') {
                     script {
@@ -97,7 +97,7 @@ pipeline {
                             -Dsonar.sources=. \
                             -Dsonar.python.coverage.reportPaths=coverage.xml \
                             -Dsonar.python.xunit.reportPaths=test-results.xml \
-                            -Dsonar.exclusions=venv/**,tests/**,**/__pycache__/**,*.pyc
+                            -Dsonar.exclusions=venv *//**,tests *//**,**//* __pycache__ *//**,*.pyc
                         """
 
                         if (env.CHANGE_ID) {
@@ -118,7 +118,7 @@ pipeline {
                     }
                 }
             }
-        }
+        } */
 
         stage('Quality Gate') {
             steps {
