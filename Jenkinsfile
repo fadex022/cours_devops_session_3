@@ -101,9 +101,11 @@ pipeline {
                             -Dsonar.exclusions=venv *//**,tests *//**,**//* __pycache__ *//**,*.pyc
                         """ */
 
+                        def scannerArgs = ""
+                        
                         if (env.CHANGE_ID) {
                             // Analyse Pull Request
-                            def scannerArgs = """
+                            scannerArgs = """
                                 -Dsonar.pullrequest.key=${env.CHANGE_ID} \
                                 -Dsonar.pullrequest.branch=${env.CHANGE_BRANCH} \
                                 -Dsonar.pullrequest.base=${env.CHANGE_TARGET} \
@@ -112,10 +114,10 @@ pipeline {
                             """
                         } else {
                             // Analyse branche
-                            def scannerArgs = "-Dsonar.branch.name=${env.BRANCH_NAME}"
+                            scannerArgs = "-Dsonar.branch.name=${env.BRANCH_NAME}"
                         }
 
-                        sh "${scannerHome}/bin/sonar-scanner"
+                        sh "${scannerHome}/bin/sonar-scanner -Dsonar.host.url=https://sonarqube.devgauss.com ${scannerArgs}"
                     }
                 }
             }
