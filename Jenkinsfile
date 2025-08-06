@@ -97,7 +97,8 @@ pipeline {
                             -Dsonar.sources=. \
                             -Dsonar.python.coverage.reportPaths=coverage.xml \
                             -Dsonar.python.xunit.reportPaths=test-results.xml \
-                            -Dsonar.exclusions=venv/**,tests/**,**/__pycache__/**,*.pyc
+                            -Dsonar.exclusions=venv/**,tests/**,**/__pycache__/**,*.pyc \
+                            -Dsonar.working.directory=.scannerwork
                         """
 
                         if (env.CHANGE_ID) {
