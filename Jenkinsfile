@@ -111,8 +111,8 @@ pipeline {
                             -Dsonar.python.coverage.reportPaths=coverage.xml \
                             -Dsonar.python.xunit.reportPaths=test-results.xml \
                             -Dsonar.exclusions=venv/**,tests/**,**/__pycache__/**,*.pyc \
+                            -Dsonar.host.url=https://sonarqube.devgauss.com \
                             ${prArgs}
-                            -Dsonar.host.url=https://sonarqube.devgauss.com
                         """
                     }
                 }
