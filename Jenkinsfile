@@ -92,17 +92,18 @@ pipeline {
                 withSonarQubeEnv('MySonarqube') {
                     script {
                         def scannerHome = tool 'SonarScanner'
-                        /* def scannerArgs = """
+                        def scannerArgs = """
                             -Dsonar.projectKey=fastapi-postgres \
                             -Dsonar.projectName="Fastapi Postgresql Application" \
                             -Dsonar.sources=. \
                             -Dsonar.python.coverage.reportPaths=coverage.xml \
                             -Dsonar.python.xunit.reportPaths=test-results.xml \
-                            -Dsonar.exclusions=venv *//**,tests *//**,**//* __pycache__ *//**,*.pyc
-                        """ */
+                            -Dsonar.exclusions=venv/**,tests/**,**/__pycache__/**,*.pyc
+                            -Dsonar.host.url=https://sonarqube.devgauss.com
+                        """
 
-                        /* def scannerArgs = ""
-                        
+                        // def scannerArgs = ""
+
                         if (env.CHANGE_ID) {
                             // Analyse Pull Request
                             scannerArgs = """
@@ -115,9 +116,9 @@ pipeline {
                         } else {
                             // Analyse branche
                             scannerArgs = "-Dsonar.branch.name=${env.BRANCH_NAME}"
-                        } */
+                        }
 
-                        sh "${scannerHome}/bin/sonar-scanner -Dsonar.host.url=https://sonarqube.devgauss.com"
+                        sh "${scannerHome}/bin/sonar-scanner ${scannerArgs}"
                     }
                 }
             }
