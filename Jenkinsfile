@@ -115,7 +115,7 @@ pipeline {
                             """
                         }
                         // Branch analysis removed - requires SonarQube Developer Edition or higher
-
+                        sh "export SONAR_HOST_URL=https://sonarqube.devgauss.com"
                         sh "${scannerHome}/bin/sonar-scanner ${scannerArgs}"
                     }
                 }
