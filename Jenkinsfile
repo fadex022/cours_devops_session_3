@@ -92,20 +92,9 @@ pipeline {
                 withSonarQubeEnv('MySonarqube') {
                     script {
                         def scannerHome = tool 'SonarScanner'
-                        def scannerArgs = """
-                            -Dsonar.projectKey=fastapi-postgres \
-                            -Dsonar.projectName="Fastapi Postgresql Application" \
-                            -Dsonar.sources=. \
-                            -Dsonar.python.coverage.reportPaths=coverage.xml \
-                            -Dsonar.python.xunit.reportPaths=test-results.xml \
-                            -Dsonar.exclusions=venv/**,tests/**,**/__pycache__/**,*.pyc \
-                        """
-
-                        // def scannerArgs = ""
-
+                        def prArgs = ''
                         if (env.CHANGE_ID) {
-                            // Analyse Pull Request
-                            scannerArgs += """
+                            prArgs = """
                                 -Dsonar.pullrequest.key=${env.CHANGE_ID} \
                                 -Dsonar.pullrequest.branch=${env.CHANGE_BRANCH} \
                                 -Dsonar.pullrequest.base=${env.CHANGE_TARGET} \
@@ -113,14 +102,18 @@ pipeline {
                                 -Dsonar.pullrequest.github.repository=fadex022/cours_devops_session_3 \
                             """
                         }
-                        /* else {
-                            // Analyse branche
-                            scannerArgs = "-Dsonar.branch.name=${env.BRANCH_NAME}"
-                        } */
 
-                        scannerArgs += " -Dsonar.host.url=https://sonarqube.devgauss.com"
-
-                        sh "${scannerHome}/bin/sonar-scanner ${scannerArgs}"
+                        sh """
+                            ${scannerHome}/bin/sonar-scanner \
+                            -Dsonar.projectKey=fastapi-postgres \
+                            -Dsonar.projectName="Fastapi Postgresql Application" \
+                            -Dsonar.sources=. \
+                            -Dsonar.python.coverage.reportPaths=coverage.xml \
+                            -Dsonar.python.xunit.reportPaths=test-results.xml \
+                            -Dsonar.exclusions=venv/**,tests/**,**/__pycache__/**,*.pyc \
+                            ${prArgs}
+                            -Dsonar.host.url=https://sonarqube.devgauss.com
+                        """
                     }
                 }
             }
