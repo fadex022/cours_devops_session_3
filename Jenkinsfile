@@ -106,17 +106,15 @@ pipeline {
 
                         if (env.CHANGE_ID) {
                             // Analyse Pull Request
-                            scannerArgs = """
+                            scannerArgs += """
                                 -Dsonar.pullrequest.key=${env.CHANGE_ID} \
                                 -Dsonar.pullrequest.branch=${env.CHANGE_BRANCH} \
                                 -Dsonar.pullrequest.base=${env.CHANGE_TARGET} \
                                 -Dsonar.pullrequest.provider=github \
                                 -Dsonar.pullrequest.github.repository=fadex022/cours_devops_session_3
                             """
-                        } else {
-                            // Analyse branche
-                            scannerArgs = "-Dsonar.branch.name=${env.BRANCH_NAME}"
                         }
+                        // Branch analysis removed - requires SonarQube Developer Edition or higher
 
                         sh "${scannerHome}/bin/sonar-scanner ${scannerArgs}"
                     }
