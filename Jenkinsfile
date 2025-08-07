@@ -98,24 +98,27 @@ pipeline {
                             -Dsonar.sources=. \
                             -Dsonar.python.coverage.reportPaths=coverage.xml \
                             -Dsonar.python.xunit.reportPaths=test-results.xml \
-                            -Dsonar.exclusions=venv/**,tests/**,**/__pycache__/**,*.pyc \
-                            -Dsonar.host.url=https://sonarqube.devgauss.com
+                            -Dsonar.exclusions=venv/**,tests/**,**/__pycache__/**,*.pyc
                         """
 
                         // def scannerArgs = ""
 
                         if (env.CHANGE_ID) {
                             // Analyse Pull Request
-                            scannerArgs += """
+                            scannerArgs = """
                                 -Dsonar.pullrequest.key=${env.CHANGE_ID} \
                                 -Dsonar.pullrequest.branch=${env.CHANGE_BRANCH} \
                                 -Dsonar.pullrequest.base=${env.CHANGE_TARGET} \
                                 -Dsonar.pullrequest.provider=github \
                                 -Dsonar.pullrequest.github.repository=fadex022/cours_devops_session_3
                             """
+                        } else {
+                            // Analyse branche
+                            scannerArgs = "-Dsonar.branch.name=${env.BRANCH_NAME}"
                         }
-                        // Branch analysis removed - requires SonarQube Developer Edition or higher
-                        sh "export SONAR_HOST_URL=https://sonarqube.devgauss.com"
+
+                        scannerArgs += " -Dsonar.host.url=https://sonarqube.devgauss.com"
+
                         sh "${scannerHome}/bin/sonar-scanner ${scannerArgs}"
                     }
                 }
