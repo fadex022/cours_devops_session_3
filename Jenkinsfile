@@ -112,10 +112,11 @@ pipeline {
                                 -Dsonar.pullrequest.provider=github \
                                 -Dsonar.pullrequest.github.repository=fadex022/cours_devops_session_3
                             """
-                        } else {
+                        }
+                        /* else {
                             // Analyse branche
                             scannerArgs = "-Dsonar.branch.name=${env.BRANCH_NAME}"
-                        }
+                        } */
 
                         scannerArgs += " -Dsonar.host.url=https://sonarqube.devgauss.com"
 
