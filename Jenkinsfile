@@ -105,6 +105,7 @@ pipeline {
 
                         sh """
                             ${scannerHome}/bin/sonar-scanner \
+                            -Dsonar.host.url=https://sonarqube.devgauss.com \
                             ${prArgs}
                         """
                     }
